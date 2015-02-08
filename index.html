@@ -2,107 +2,39 @@
   <head>
     <title>Leap JavaScript Sample</title>
 	<style>
-	#smileyface { position: absolute;}
+	body{
+		background-color:#000000;
+	}
+	#smileyface {
+		position: absolute;
+	}
+	.funtext{
+		color: pink;
+  position: fixed;
+		top: 50%;
+		left: 50%;
+		/* bring your own prefixes */
+		transform: translate(-50%, -50%);
+		font-size:100px;
+	}
+	
 	</style>
   </head>
   <body>
-    <div class="result">0</div>
-	<img src="http://www.worldpeace-uk.org/wp-content/uploads/2013/07/smiley-face.jpg" id="smileyface" height=100 width=100>
+    <div class="funtext">um</div>
 	<p></p>
 	
 	<script src="http://js.leapmotion.com/leap-0.6.3.js"></script>
 	<script src="http://js.leapmotion.com/leap-plugins-0.1.8.js"></script>
 	<script src="http://code.jquery.com/jquery-2.1.3.js"></script>
 	<script src="click.js"></script>
-	<script>var cats = {};
+	<script src="hoverselect.js"></script>
+	<script>
+	var text=$(".funtext");
 
-	$("#smileyface").css('top', '250px');;
-	$("#smileyface").css('left', '750px');;
-		var pos=$("#smileyface").position();
-	console.log(pos.top+" "+pos.left);
-	var mousedown = false;
-var isCounting = false;
-var resultInt = 0;
-var result = $('.result');
-document.onmousedown = function() {
-    mousedown = true;   
-}
-
-document.onmouseup = function() {
-    mousedown = false;
-}
-
-var counter=0;
-Leap.loop(function(frame) {
-
-
-  frame.pointables.forEach(function(pointable, index) {
-  if (index==1){
-  
-
-    var cat = ( cats[index] || (cats[index] = new Cat()) );    
-    cat.setTransform(pointable.screenPosition(),index);
-  }  
-  });
-  
-}).use('screenPosition', {scale: 0.25});
-
-
-var Cat = function() {
-	console.log(this);
-  var cat = this;
-  var img = document.createElement('img');
-  img.height=50;
-  img.width=50;
-  img.src = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/109794/cat_2.png';
-  img.style.position = 'absolute';
-
-	img.onload = function () {
-    cat.setTransform([window.innerWidth/2,window.innerHeight/2], 0);
-    document.body.appendChild(img);
-	}
-  
-
-
-  cat.setTransform = function(position,index) {
-  if(index==1){
-   counter++;
-   if(Math.abs((position[1]+50/2-($("#smileyface").position().top+$("#smileyface").height()/2))<50
-			&&Math.abs(position[0]+50/2-($("#smileyface").position().left+$("#smileyface").width()/2))<75)
-			&&!isCounting) {
-        isCounting = true;
-        var f = window.setTimeout(function() {
-            isCounting = false;
-            resultInt = parseInt(result.text());
-            resultInt++;
-            console.log(resultInt);
-            result.text(resultInt);
-        }, 1000);
-        console.log(f);
-    }
 	
-   
-   
-   }
-   if (index==1&&counter==100){
-	console.log(position[1]+50/2-($("#smileyface").position().top+$("#smileyface").height()/2)+" "+position[0]+" "+$("#smileyface").width());
-	counter=0;
-	}
-    img.style.left = position[0] - img.width  / 2 + 'px';
-    img.style.top  = position[1] - img.height / 2 + 'px';
-	
-	
-    img.style.webkitTransform = img.style.MozTransform = img.style.msTransform =
-    img.style.OTransform = img.style.transform;
-
-  };
-
-};
-
-cats[1] = new Cat();
-
-// This allows us to move the cat even whilst in an iFrame.
-Leap.loopController.setBackground(true)</script>
+	hoverselect(text);
+	</script>
   </body>
   
 </html>
