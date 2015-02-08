@@ -35,11 +35,20 @@ document.onmouseup = function() {
 var counter=0;
 Leap.loop(function(frame) {
 
-
+if(mousedown && !isCounting) {
+        isCounting = true;
+        var f = window.setTimeout(function() {
+            isCounting = false;
+            resultInt = parseInt(result.text());
+            resultInt++;
+            console.log(resultInt);
+            result.text(resultInt);
+        }, 1000);
+        
+    }
+	
   frame.pointables.forEach(function(pointable, index) {
   if (index==1){
-  
-
     var cat = ( cats[index] || (cats[index] = new Cat()) );    
     cat.setTransform(pointable.screenPosition(),index);
   }  
@@ -49,43 +58,20 @@ Leap.loop(function(frame) {
 
 
 var Cat = function() {
-	console.log(this);
   var cat = this;
   var img = document.createElement('img');
-  img.height=50;
-  img.width=50;
   img.src = 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/109794/cat_2.png';
   img.style.position = 'absolute';
-
-	img.onload = function () {
+  img.onload = function () {
     cat.setTransform([window.innerWidth/2,window.innerHeight/2], 0);
     document.body.appendChild(img);
-	}
+  }
   
-
-
   cat.setTransform = function(position,index) {
-  if(index==1){
+  if(index==1)
    counter++;
-   if(Math.abs((position[1]+50/2-($("#smileyface").position().top+$("#smileyface").height()/2))<50
-			&&Math.abs(position[0]+50/2-($("#smileyface").position().left+$("#smileyface").width()/2))<75)
-			&&!isCounting) {
-        isCounting = true;
-        var f = window.setTimeout(function() {
-            isCounting = false;
-            resultInt = parseInt(result.text());
-            resultInt++;
-            console.log(resultInt);
-            result.text(resultInt);
-        }, 1000);
-        console.log(f);
-    }
-	
-   
-   
-   }
    if (index==1&&counter==100){
-	console.log(position[1]+50/2-($("#smileyface").position().top+$("#smileyface").height()/2)+" "+position[0]+" "+$("#smileyface").width());
+	console.log(position[0]+" "+position[1]);
 	counter=0;
 	}
     img.style.left = position[0] - img.width  / 2 + 'px';
@@ -99,7 +85,7 @@ var Cat = function() {
 
 };
 
-cats[1] = new Cat();
+cats[0] = new Cat();
 
 // This allows us to move the cat even whilst in an iFrame.
 Leap.loopController.setBackground(true)</script>
